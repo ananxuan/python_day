@@ -39,14 +39,13 @@ def product():
             LIST_PRODUCT.append(i)
 
         m = 0
+        a = prettytable.PrettyTable(['id','name','price','count'])
+        a.align["name"] = "l"
         for i in LIST_PRODUCT:
-            a = prettytable.PrettyTable(['id','name','price','count'])
-            # a = prettytable()
-            a.align["name"] = "l"
             a.add_row([m,i["name"],i["price"],i["count"]])
-            print(a)
             # print("%d    商品:%s,   价格:%s,  数量:%s"%(m,i["name"],i["price"],i["count"]))
             m += 1
+        print(a)
         # print(LIST_PRODUCT)
     pass
 
