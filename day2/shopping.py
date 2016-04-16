@@ -52,6 +52,7 @@ def product():
 
 def helpme():
     print("okok")
+    print("1、use vcs - update，2、use vcs -commit-commit&push")
     return True
     pass
 
