@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/s12.iml" filepath="$PROJECT_DIR$/.idea/s12.iml" />
-      <module fileurl="file://$USER_HOME$/Desktop/python/salt-2015.8.8/.idea/salt-2015.8.8.iml" filepath="$USER_HOME$/Desktop/python/salt-2015.8.8/.idea/salt-2015.8.8.iml" />
-    </modules>
-  </component>
-</project>
