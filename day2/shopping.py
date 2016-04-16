@@ -51,6 +51,7 @@ def product():
 
 
 def helpme():
+    print("okok")
     return True
     pass
 
