@@ -53,55 +53,56 @@ def charge(name,pay_total_money):           # 付款
     with open(AUTH_FILE,'r') as f:      # 获取用户信息（用户名、密码、银行卡信息）
         content = f.readlines()
 
-    with open(AUTH_FILE,'w') as f:          # 将更新后的信息写回文件
-        card_error_num = 0                  # 银行卡密码输错次数
-        CARD_LOGIN_FLAG = False
-        cash = 0
-        while card_error_num < 3:           # 银行卡密码错误三次后重新登录
-            card_passwd = input("请输入银行卡密码> ").strip()
-            m = 0
-            for i in content:
-                i = i.strip().split("||")
+
+    card_error_num = 0                  # 银行卡密码输错次数
+    CARD_LOGIN_FLAG = False
+    cash = 0
+    while card_error_num < 3:           # 银行卡密码错误三次后重新登录
+        card_passwd = input("请输入银行卡密码> ").strip()
+        m = 0
+        for i in content:
+            i = i.strip().split("||")
+            # print(i)
+            if name == i[0] and card_passwd == i[3]:      # 用户名和密码匹配
+                cash = round(float(i[4]),2)
+                CARD_LOGIN_FLAG = True              # 标识银行卡密码正确
+                break
+            m += 1
+        if CARD_LOGIN_FLAG == True:                 # 如果银行卡密码正确
+            if cash >= pay_total_money:                 # 银行卡余可付款
                 # print(i)
-                if name == i[0] and card_passwd == i[3]:      # 用户名和密码匹配
-                    cash = round(float(i[4]),2)
-                    CARD_LOGIN_FLAG = True              # 标识银行卡密码正确
-                    break
-                m += 1
-            if CARD_LOGIN_FLAG == True:                 # 如果银行卡密码正确
-                if cash >= pay_total_money:                 # 银行卡余可付款
-                    # print(i)
-                    temp_cash = round(float(i[4]),2)
-                    # print(temp_cash)
-                    temp_cash -= pay_total_money
-                    # print(temp_cash)
-                    i[4] = str(round(temp_cash,2))
-                    # print(i[4])
-                    str1 = "||".join(i)
-                    content[m] = str1 + "\n"
-                    # print(content[m])
-                    # print(content)
-                    is_charge = True
-                    update_product_file()           # 确认付款后更新仓库文件
-                    break
-                else:
-                    is_charge = False
-                    print("余额不足！")
-                    break
+                temp_cash = round(float(i[4]),2)
+                # print(temp_cash)
+                temp_cash -= pay_total_money
+                # print(temp_cash)
+                i[4] = str(round(temp_cash,2))
+                # print(i[4])
+                str1 = "||".join(i)
+                content[m] = str1 + "\n"
+                # print(content[m])
+                # print(content)
+                is_charge = True
+                update_product_file()           # 确认付款后更新仓库文件
+                break
             else:
                 is_charge = False
-                card_error_num +=1
-                print("银行卡密码错误！")
+                print("余额不足！")
+                break
+        else:
+            is_charge = False
+            card_error_num +=1
+            print("银行卡密码错误！")
 
         if is_charge == True:           # 付款成功后更新银行卡余额
             n = len(content)
             m = 0
-            for i in content:
-                # print(i)
-                if m == n -1:
-                    i = i.strip()
-                f.write(i)
-                m += 1
+            with open(AUTH_FILE,'w') as f:          # 将更新后的信息写回文件
+                for i in content:
+                    # print(i)
+                    if m == n -1:
+                        i = i.strip()
+                    f.write(i)
+                    m += 1
 
     return  is_charge
 
