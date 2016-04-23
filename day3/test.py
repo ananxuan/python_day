@@ -106,13 +106,26 @@
 # print(b.pop(0))
 # print(b)
 #
-import  collections
+# import  collections
+#
+# a = dict([('name',1),('sex',0),('age',18)])
+# for i in a.items():
+#     print(i)
+#
+# b = collections.OrderedDict([('name',1),('sex',0),('age',18)])
+# for i in b.items():
+#     print(i)
 
-a = dict([('name',1),('sex',0),('age',18)])
-for i in a.items():
-    print(i)
 
-b = collections.OrderedDict([('name',1),('sex',0),('age',18)])
-for i in b.items():
-    print(i)
+# import json
+# a = '{"name":"ds","other":{"count":1,"age":18}}'
+# b = json.loads(a)
+# print(b)
 
+
+# a = ["name"]
+# b = str(a[0:])
+# print(b)
+
+a = {}
+a is dict
