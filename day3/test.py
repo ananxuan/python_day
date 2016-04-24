@@ -127,5 +127,46 @@
 # b = str(a[0:])
 # print(b)
 
-a = {}
-a is dict
+# a = {}
+# a is dict
+
+# import json
+# inp_str = "[11,22,33,44]"
+# inp_list = json.loads(inp_str)
+# print(inp_list)
+# for i in range(100):
+#     i = str(i)
+#     print("\033[%s;31;40mabc\033[0m"%i)
+
+
+
+# a = "sdgsdgag"
+# print(a.ljust(10))
+
+#域名正则表达式
+# import re
+# def getUrlFromFile(fobj):
+#     # regex = re.compile(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", re.IGNORECASE)
+#     regex = re.compile(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", re.IGNORECASE)
+#     urls = regex.findall(fobj)
+#     # print urls
+#     return urls
+#
+# def main(FilefilePath):
+#     fobj = open(FilefilePath, 'r').read()
+#     urllist = getUrlFromFile(fobj)
+#     print(urllist)
+#
+# main("info.txt")
+
+# a = {"name":"ds","age":18}
+# a.get()
+# print(a)
+# a.pop("name")
+# print(a)
+
+# a = ["asdfsaf"]
+# a.clear()
+# print(a)
+
+print("\033[5;31;40mabc\033[0m")
