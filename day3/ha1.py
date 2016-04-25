@@ -20,17 +20,21 @@ def read_conf():
         head = ''
         body = ''
         for line in  f.readlines():
+            # 如果行记录是以字符打头
             if line[0] != " " and line != "\n":
                 line = line.strip().split()
                 head = line[0]
                 body = "    ".join(line[1:])
                 HA_BODY = collections.OrderedDict()
                 HA_BODY[body] = []
+                # 如果关键字不存在入字典中，则加入关键字
                 if HA_CONF.get(head) == None:
                     HA_CONF[head]=copy.copy(HA_BODY)
+                # 如果存在，则置值为空列表
                 else:
                     HA_CONF[head][body]= []
                     # print(head,body)
+            # 否则记录行记录到关键字的values中
             else:
                 line = line.strip()
                 if len(line) != 0:
@@ -51,8 +55,9 @@ def deal_conf():
     while True:
         line_input = input("[]# ").strip().lower()
         list_input = line_input.split()
+        # 根据输入切换到特定的函数
         fun = SWITCH_GLOBAL.get(list_input[0])
-        # print("DEAL_CONF")
+        # 执行函数
         if fun != None:
             fun(*list_input)
         else:
@@ -62,6 +67,7 @@ def deal_conf():
 
 #backend配置处理
 def backend(*args):
+    # 判断输入是否合法
     if len(args) > 1:
         if args[1] != '?':
             line = " ".join(args)
@@ -75,12 +81,14 @@ def backend(*args):
     global CURRENT_INPUT_HEAD
     global CURRENT_INPUT_BODY
     global SWITCH_BACKEND
+    # 设置当前级别和关键字
     LEVEL = 1
     CURRENT_INPUT_HEAD = "backend"
     while True:
         line_input = input("[%s]# "%(CURRENT_INPUT_HEAD)).strip().lower()
         list_input = line_input.split()
         # print("BACKEND")
+        # 将输入转换为特定的函数
         fun = SWITCH_BACKEND.get(list_input[0])
         if fun != None:
             fun(*list_input)
@@ -97,6 +105,7 @@ def undo(*args):
     global CURRENT_INPUT_HEAD
     global CURRENT_INPUT_BODY
     global HA_CONF
+    # 判断输入是否合法
     if len(args) != 2:
         print("命令错误，请用undo xxx")
         return
@@ -111,6 +120,7 @@ def undo(*args):
                 print(" ",i)
         return
     try:
+        # 删除记录
         if LEVEL == 0:
             HA_CONF.pop(args[1])
         elif LEVEL == 1:
@@ -123,7 +133,7 @@ def undo(*args):
 
     display(args)
 
-
+# 帮助信息
 def helpme(*args):
     print(LEVEL)
     if LEVEL == 0:
@@ -145,7 +155,7 @@ def helpme(*args):
             quit        返回上一级或退出
             """)
 
-
+# 打印配置
 def display(*args):
     global LEVEL
     global HA_CONF
@@ -182,7 +192,7 @@ def display(*args):
         else:
             print()
 
-
+# 回退到上一级
 def back(*args):
     global LEVEL
     global CURRENT_INPUT_BODY
@@ -202,11 +212,13 @@ def back(*args):
         print("系统错误！")
         exit()
 
+# backend的后台配置处理函数
 def dnsname(*args):
     global LEVEL
     global CURRENT_INPUT_BODY
     global CURRENT_INPUT_HEAD
     global HA_CONF
+    # 判断输入是否合法
     if len(args) > 2:
         if args[2] == "?":
             print(" <cr>")
