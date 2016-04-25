@@ -222,10 +222,10 @@ for item in s:
 # # 将字节转换成字符串
 # new_str = str(s_bytes, 'utf-8')
 # print(new_str)
-with open("info.txt","r",encoding="utf-8") as f:
-    for i in f.readline():
-        print(i,end="")
-        print(f.tell())
+# with open("info.txt","r",encoding="utf-8") as f:
+#     for i in f.readline():
+#         print(i,end="")
+#         print(f.tell())
 #
 # ret = range(10)
 
@@ -245,3 +245,30 @@ with open("info.txt","r",encoding="utf-8") as f:
 # foo()
 
 # foo = before()
+
+def a(x):
+    x *= 2
+    # b(x)
+    yield x
+
+
+def b(y):
+    y *= 3
+    # a(y)
+    yield y
+
+j = 0
+n = 1
+while True:
+    m = a(n)
+    n = m.__next__()
+    print("%da: %d"%(j,n))
+    m = b(n)
+    n = m.__next__()
+    print("%db: %d"%(j,n))
+    j += 1
+    if j == 10:
+        break
+
+
+
