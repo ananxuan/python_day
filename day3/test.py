@@ -40,28 +40,23 @@
 
 
 # from collections import Counter
-
-def create_counter():
-    a = "asfasdgagqw3re"
-    b = Counter(a)
-    print(b)
-    print(b.items())
-    for i,h in b.items():
-        print(i,h)
-# create_counter()
+# a="asfasdgagqw3re"
+# b = Counter(a)
+# print(b)
+# print(b.items())
+# for i,h in b.items():
+#     print(i,h)
 
 
-#有序字典,打印时值得顺序是不变的。
-def crete_collections():
-    import  collections
-    a = collections.OrderedDict()
-    a['a']='a'
-    a['b']='b'
-    a['c']='c'
-
-    a.update({'a':'aa','d':'dd'})
-    print(a)
-# crete_collections()
+#有序字典
+# import  collections
+# a = collections.OrderedDict()
+# a['a']='a'
+# a['b']='b'
+# a['c']='c'
+#
+# a.update({'a':'aa','d':'dd'})
+# print(a)
 
 
 #默认字典就是定义values的值是什么类型
@@ -135,140 +130,4 @@ def crete_collections():
 # a = {}
 # a is dict
 
-# import json
-# inp_str = "[11,22,33,44]"
-# inp_list = json.loads(inp_str)
-# print(inp_list)
-# for i in range(100):
-#     i = str(i)
-#     print("\033[%s;31;40mabc\033[0m"%i)
-
-
-
-# a = "sdgsdgag"
-# print(a.ljust(10))
-
-#域名正则表达式
-# import re
-# def getUrlFromFile(fobj):
-#     # regex = re.compile(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", re.IGNORECASE)
-#     regex = re.compile(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", re.IGNORECASE)
-#     urls = regex.findall(fobj)
-#     # print urls
-#     return urls
-#
-# def main(FilefilePath):
-#     fobj = open(FilefilePath, 'r').read()
-#     urllist = getUrlFromFile(fobj)
-#     print(urllist)
-#
-# main("info.txt")
-
-# a = {"name":"ds","age":18}
-# a.get()
-# print(a)
-# a.pop("name")
-# print(a)
-
-# a = ["asdfsaf"]
-# a.clear()
-# print(a)
-
-# print("\033[5;31;40mabc\033[0m")
-
-def str_bytes():
-    print(bin(ord("a")))
-    print(bin(ord("\n")))
-    print(bin(ord("刘")))
-    for i in "刘":
-        print(i,bytes(i,"gbk"))
-        # i_byte =
-    for i in "刘":
-        print(i,bytes(i,"utf-8"))
-        i_byte = bytes(i,"utf-8")
-        for l in i_byte:
-            print(l,bin(l))
-
-# -*- coding:utf-8 -*-
-
-# py 2.7
-"""
-s = "武沛齐"
-for item in s:
-    print(item,ord(item), bin(ord(item)))
-# 问题？为什么2.7的for不以字符的形式循环
-# 如果，字符，想要看字节，需要转换成字节
-# 字符串 str ，字节 bytes[无用py3做过度]
-# 1、for，默认字节循环
-# 2、bytes类型形同虚设
-"""
-"""
-s = "武沛齐"
-for item in s:
-    # print(item)# 汉字=》三字节》二进制
-    print(item, bytes(item, 'utf-8'))
-    item_bytes = bytes(item, 'utf-8')
-    for j in item_bytes:
-        print(j,bin(j))
-"""
-# py3
-# 1、bytes，用来获取字符串的字节表示
-# 2、for循环，字符循环
-
-# s = "武沛齐"
-# # 将字符串转换成字节
-# s_bytes = bytes(s, 'utf-8')
-# print(s_bytes)
-# # 将字节转换成字符串
-# new_str = str(s_bytes, 'utf-8')
-# print(new_str)
-# with open("info.txt","r",encoding="utf-8") as f:
-#     for i in f.readline():
-#         print(i,end="")
-#         print(f.tell())
-#
-# ret = range(10)
-
-
-
-
-# def foo():
-#     print("abc")
-#
-# def before():
-#     print("123")
-#     temp()
-#
-# temp = foo
-# foo = before
-#
-# foo()
-
-# foo = before()
-
-def a(x):
-    x *= 2
-    # b(x)
-    yield x
-
-
-def b(y):
-    y *= 3
-    # a(y)
-    yield y
-
-j = 0
-n = 1
-while True:
-    m = a(n)
-    n = m.__next__()
-    print("%da: %d"%(j,n))
-    m = b(n)
-    n = m.__next__()
-    print("%db: %d"%(j,n))
-    j += 1
-    if j == 10:
-        break
-
-
-
+print("\033[4;31;")
