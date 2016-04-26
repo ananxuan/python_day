@@ -2,76 +2,45 @@
 # -*- coding: utf-8 -*-
 __author__ = 'DGS'
 
+# 实现的功能，只有你eval()能够算来的值，我自己写的代码也就能算出来
 import re
 from chengfa import chengfa
 from jiafa import jiafa
-from kuohao import kuohao
-from tihuan import tihuan
-#m = raw_input("input your :")
-# m = "2 * 3 + (5 *6/(2+4* 4))/4 + (2+3 / 4+(3+2/5)+3)-3"
-m = "1 - (-0.2) *(-60.9-30/4+( -40.6/-5.9)* (9 -2*5/3 +7.1 /3*99/4*2998 +10 * -56.8/14)) - (-4*3)/(16-3*2)"
+from calculate import calculate
+from equl_tihuan import equl_tihuan
+
+# m 为字符串表达式
+m = "1 - (-0.2) *(-60.9-30/4+( -40.6*-5.9)* (-10.1/12*-11.112/9 -2*5/3 +7.1 /3*99/4*2998 -10 * 56.8/-14*-1.123+13)) - (-4*3)/(16-3*2)"
+# m = "11.23"
+# r用于eval计算来对比自己写的算法是否正确
 r = m
-#2、将算术转换为列表，每个列表一个字符
-# l = re.findall('\S',m)
-# print l
-#2、取括号,第一个左括号后面是非括号+右括号，记录括号坐标。
-# l = re.findall('[^(]+| \(\S+)]',m)
-# l = re.findall('[^(]* | \([^()]*',m)
-# l = re.findall('[^()]+',m)
 
-# #乘除法
-# def math2(k):
-#     w = re.findall('\d+|[*/]',k)
-#     n = 0
-#     z = 1.0
-#     for i in w:
-#        if i == "*":z = z * float(w[n+1])
-#        elif i == "/": z = z / float(w[n+1])
-#        else:z = float(i)
-#     return z
-#加减法
-# def math1(s):
-#     e = re.findall('[\d\s]+[*/][\d\s]+',s)
-#     for i in e:
-#         i = math2(i)
-
-
-def math(g):
-    # y = g
-    # print "before:",y
-    #替换负号
-    g = tihuan(g)
-    # g = re.sub('')
-    # print "tihuan:",g
-    if re.findall('[()]+',g):
-       # print "math-1:",g
-       l = re.findall('[(][^()]+[)]',g)  #取所有最内部括号\
-       # print "math-2:",l
+# 算术主函数
+def math(arith_str):
+    #替换空格和负号，将连载一起的+-或--替换为+或-
+    arith_str = equl_tihuan(arith_str)
+    # 如果发现括号，则先算括号里面的
+    if re.findall('[()]+', arith_str):
+       arith_sub = re.findall('[(][^()]+[)]', arith_str)  #取所有最内部括号
        n = 0
-       for i in l:
-          # print "math-3:",i
-          j = re.search('[^()]+',i).group()  #去括号
-          # print "math-4:",j
-          i = kuohao(j)
-          # print "math-5:",i
-          g = g.replace(l[n],i,1)
+       for i in arith_sub:
+          # 取括号内的表达式
+          j = re.search('[^()]+',i).group()
+          # 算括号内的值
+          i = calculate(j)
+          # 将原来的表达式替换为算出来的值
+          arith_str = arith_str.replace(arith_sub[n], i, 1)
           n = n + 1
-       print("del-kuohao:",g)
-
-    elif re.findall('[+*-/]+',g):
-        g = kuohao(g)
-        # print "math-+*/:",g
-        return g
+       print("去最外层括号:", arith_str)
+    # 如果没有括号，则再算加减乘除
+    elif re.findall('[+*/-]+', arith_str):
+        arith_str = calculate(arith_str)
+        return arith_str
+    # 如果就一个字符串，不包含括号和加减乘除则，直接返回
     else:
-        print(g)
-        return g
-    # print "after:",y
-    return math(g)
-# m = "9 -2*5/3 +7.1 /3*99/4*2998 +10 * -56.8/14"
-# r = m
+        return arith_str
+    return math(arith_str)
 print ("The original input:",m)
 m = math(m)
 print("The result is:" ,m)
-
 print("eval(r)=",eval(r))
-

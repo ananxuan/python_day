@@ -202,47 +202,68 @@ def exam1():
 # 这里有一个很大的问题,bin只是将数字转为二进制，并非转为了unicode编码，unicode是2字节，python3和内存中都是unicode保存，
 # ord是返回字符在unicode的位置，比如空格" "的位置是32，bin(32)就是0b100000,这样就省略了10个0，
 # 网络传输是以bytes传输
-a = " "
-print(bin(ord(a.encode())))       # 0b100000     # 最前面的10个0去掉
-print(bin(ord(a)))                # 0b100000
-print(ord(a))                     # 32
-a = "~"
-print(bin(ord(a.encode())))       # 0b1111110    # 最前面的9个0去掉
-print(bin(ord(a)))
-print(ord(a))                     # 126
+def test_code():
+    a = " "
+    print(bin(ord(a.encode())))       # 0b100000     # 最前面的10个0去掉
+    print(bin(ord(a)))                # 0b100000
+    print(ord(a))                     # 32
+    a = "~"
+    print(bin(ord(a.encode())))       # 0b1111110    # 最前面的9个0去掉
+    print(bin(ord(a)))
+    print(ord(a))                     # 126
 
-a = "ab"
-print(a.encode())       # b'ab'   # bytes
-a = str("ab")
-print(a.encode())       # b'ab'   # bytes     其二进制表示可以查ascii表
-a = "我"
-print(a.encode())       # b'\xe6\x88\x91'
-print(ord(a))           # 25105         # """ Return the Unicode code point for a one-character string. """
-print(bin(ord(a)))      # 0b 1100010 00010001
-print(bin(25105))       # 0b 1100010 00010001     # 返回的应该是unicode编码  ，最前面的一个0去掉了0b 01100010 00010001
-for i in a.encode():
-    print(i)            # 230            136            145
-    print(bin(i))       # 0b11100110     0b10001000     0b10010001    则unicode编码为 0110 001000 010001
+    a = "ab"
+    print(a.encode())       # b'ab'   # bytes
+    a = str("ab")
+    print(a.encode())       # b'ab'   # bytes     其二进制表示可以查ascii表
+    a = "我"
+    print(a.encode())       # b'\xe6\x88\x91'
+    print(ord(a))           # 25105         # """ Return the Unicode code point for a one-character string. """
+    print(bin(ord(a)))      # 0b 1100010 00010001
+    print(bin(25105))       # 0b 1100010 00010001     # 返回的应该是unicode编码  ，最前面的一个0去掉了0b 01100010 00010001
+    for i in a.encode():
+        print(i)            # 230            136            145
+        print(bin(i))       # 0b11100110     0b10001000     0b10010001    则unicode编码为 0110 001000 010001
 
-a = "我"
-print(a.encode(encoding='gbk'))     # b'\xce\xd2'
+    a = "我"
+    print(a.encode(encoding='gbk'))     # b'\xce\xd2'
 
-a = "你"
-print(a.encode())       # b'\xe4\xbd\xa0'
-# 报
-# 01100010 10100101                 # unicode
-# 11100110 10001010 10100101        # utf-8
+    a = "你"
+    print(a.encode())       # b'\xe4\xbd\xa0'
+    # 报
+    # 01100010 10100101                 # unicode
+    # 11100110 10001010 10100101        # utf-8
 
-print("我".encode("gbk"))        # b'\xce\xd2'
-for i in "我".encode(encoding='gbk'):
-    print(i)                    # 206               210
-    print(bin(i))               # 0b11001110        0b11010010
+    print("我".encode("gbk"))        # b'\xce\xd2'
+    for i in "我".encode(encoding='gbk'):
+        print(i)                    # 206               210
+        print(bin(i))               # 0b11001110        0b11010010
 
-print("######")
-print("我".encode("gb2312"))  # b'\xce\xd2'
-for i in "我".encode("gb2312"):
-    print(i)                    # 206               210
-    print(bin(i))               # 0b11001110        0b11010010
+    print("######")
+    print("我".encode("gb2312"))  # b'\xce\xd2'
+    for i in "我".encode("gb2312"):
+        print(i)                    # 206               210
+        print(bin(i))               # 0b11001110        0b11010010
 
-print("#############")
-# print(str("我".encode().decode()))
+    print("#############")
+    # print(str("我".encode().decode()))
+
+
+def tihuan(o):
+    import re
+    print(o)
+    o = o.replace('*-','AA')
+    o = o.replace("/-","BB")
+    print(o)
+    l1 = re.findall('^-?\d+\.?\d*[/|*/\"AA\"|\"BB\"][^+-]+|\d+\.?\d*[/|*/\"AA\"|\"BB\"][^+-]+|^-*[^+-]+|[^+-]+',o)
+    print(l1)
+
+# tihuan("-10.1/12*-11.112-9 -2*5/3 +7.1 /3*99/4*2998 -10 * 56.8/-14+13")
+
+# 中括号的  -  要么放在最前面，要么放在最后面,才表示  - 要么转义
+def z_kuohao():
+    import re
+    m = "1+1asds,ad*23-.4z"
+    l = re.findall('[a\-z]+',m)
+    print(l)
+z_kuohao()
