@@ -13,6 +13,7 @@ def jiafa(k):
     if re.match('^-',k):
         w2.pop(0)
     n = 1
+
     z = float(w1[0])
     for i in w2:
         if i == "+":
