@@ -4,13 +4,19 @@ __author__ = 'DGS'
 import re
 
 def equl_tihuan(g):
-    # 可能由于输入错误，算子中会存在空格，这里是去掉算子中的空格
-    g = g.replace(" ","")
-    # 替换+-和--为+或-，用递归
-    if re.findall('\+-|--',g):
-        g = re.sub('\+-','-',g)
-        g = re.sub('--','+',g)
-        g = equl_tihuan(g)
-        g = str(g).strip()
-    # print("等价变换:",g)
+    g = g.strip()
+    #  替换空格、--、++、-+、+-、/+、*+为去空格、+、+、-、-、/、*,还有去掉行首的 + 号
+    while True:
+        g = g.replace(" ","")
+        if g.startswith("+"):
+            g = g[1:]
+        if re.findall('\+-|--|\+\+|-\+|\*\+|/\+',g):
+            g = re.sub('\+-','-',g)
+            g = re.sub('--','+',g)
+            g = re.sub('\+\+','+',g)
+            g = re.sub('-\+','-',g)
+            g = re.sub('\*\+','*',g)
+            g = re.sub('/\+',"/",g)
+        else:
+            break
     return g

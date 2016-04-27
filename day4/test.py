@@ -260,10 +260,46 @@ def tihuan(o):
 
 # tihuan("-10.1/12*-11.112-9 -2*5/3 +7.1 /3*99/4*2998 -10 * 56.8/-14+13")
 
-# 中括号的  -  要么放在最前面，要么放在最后面,才表示  - 要么转义
+# 中括号里的  -  要么放在最前面，要么放在最后面,才表示  - 要么转义 \-
 def z_kuohao():
     import re
     m = "1+1asds,ad*23-.4z"
     l = re.findall('[a\-z]+',m)
     print(l)
-z_kuohao()
+# z_kuohao()
+
+
+# 中括号系列
+# [AA|BB]表示 == [A|B]  == [AB]
+# [A{2}|B{2}] == [AB{}2] 表示匹配 A或B或{或}或2 一次
+def z_yinhao():
+    import re
+    m = "-123.4BB1234.5+6+5.6/3.5"
+    # 括号里面好转义
+    l = re.findall(r'(-)?(\d+\.?\d*)(AA|BB|\*|/)([^ +-]+)',m)
+    n = 0
+    for i in l:
+        i = "".join(i)
+        print(i)
+        l[n] = i
+        n += 1
+    print(l)
+    a = "one xxx three four five six8e two three four five six8"
+    # 把r后面的去掉括号后看做一个字符串B，如果a里面有B这样的字符串，则返回一个元祖，元祖里的元素是括号内的值
+    #
+    b = re.findall(r"(e )(two|x{3})( )(three)( )(four)( )(five)( )s",a) # [('xxx', 'three', 'four', 'five'), ('two', 'three', 'four', 'five')]
+    # 上面的额等价于 b = re.findall(r"e (two|xxx) (three) (four) (five) s",a)
+    print(b)
+# z_yinhao()
+
+# import re
+# a = "rrr"
+# if a.find("g") >= 0 or a.find("g")>=0:
+#     print("ok")
+# if re.findall('a|b',a):
+#     print("haha")
+import re
+a = "+1 - (-0.2) *(-60.9-30/4+( ++++40.6*+5.9)* (-10.1/12*-11.112+9-1111-(100*---++-+3.12*71.1/9.3 -2)*5*3 +7.1 /3*99/4*2998 -10 * 56.8/-14*-1.123+13)) - (-4*3)/(16-3*2)"
+if re.findall('DDD',a):
+
+    print("lll")
