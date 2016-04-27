@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = 'DGS'
+from equl_tihuan import equl_tihuan
 
 import re
 def chengfa(k):
     k = k.strip()
+    k = equl_tihuan(k)
     w1 = re.findall('-*\d+\.?\d*',k)
     w2 = re.findall('[*/]+',k)
     n = 1

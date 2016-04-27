@@ -9,7 +9,7 @@ def jiafa(k):
     k = k.strip()
     k = equl_tihuan(k)
     w1 = re.findall('^-*\d+\.?\d*|\d+\.?\d*',k)
-    w2 = re.findall('[-+]+',k)
+    w2 = re.findall('[-+]',k)
     if re.match('^-',k):
         w2.pop(0)
     n = 1
