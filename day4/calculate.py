@@ -6,6 +6,7 @@ from chengfa import chengfa
 from jiafa import jiafa
 from special import special
 from equl_tihuan import equl_tihuan
+from deepprocess import deepprocess
 
 
 def calculate(o):
@@ -16,13 +17,16 @@ def calculate(o):
     # 先算特殊算术
     o_temp = o
     # print(o)
+    o = o.replace("**-","E")
+    o = o.replace("//-","F")
     o = o.replace("**","C")
     o = o.replace("//","D")
+    o = o.replace("%-","G")
     # o = o.replace("%","E")
-    print(o)
-    if re.findall('C|D|%',o):
-        print("ok")
-        l1 = re.findall('(\d+\.?\d*)(C|D|%)(-|\+)?([^+*/-]+)',o)
+    # print(o)
+    if re.findall('C|D|E|F|G%',o):
+        # print("ok")
+        l1 = re.findall('(^-)?(\d+\.?\d*)(C|D|E|F|G|%)(-|\+)?([^+*/-]+)',o)
         m = 0
         # 拼接元祖
         for i in l1:
@@ -31,19 +35,23 @@ def calculate(o):
             m += 1
         o = o_temp
         n = 0
-        print(l1)
+        # print(l1)
         for i in l1:
             # i = i.replace("C",)
             l1[n] = special(i)
             i = i.replace("C","**")
             i = i.replace("D","//")
-            print("i:",i)
-            print(l1[n])
-            print("o:",o)
+            i = i.replace("E","**-")
+            i = i.replace("F","//-")
+            i = i.replace("G","%-")
+            # print("i:",i)
+            # print(l1[n])
+            # print("o:",o)
             o = o.replace(i,l1[n],1).strip()
-            print(o)
+            # print(o)
             n += 1
-
+        if re.search('e',o):
+            o = deepprocess(o)
     # 进行乘除
     if re.findall('[*/]',o):
         # 保留最原始的 o 值

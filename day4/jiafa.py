@@ -17,11 +17,8 @@ def jiafa(k):
     z = float(w1[0])
     for i in w2:
         if i == "+":
-            z = float(w1[n-1]) + float(w1[n])
-            n = n + 1
-            w1[n-1] = z
+            z += float(w1[n])
         elif i == "-":
-            z = float(w1[n-1]) - float(w1[n])
-            n = n + 1
-            w1[n-1] = z
+            z -= float(w1[n])
+        n += 1
     return str(z).strip()

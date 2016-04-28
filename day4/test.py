@@ -109,7 +109,7 @@ def Filter(f1,f2):
 def login(what):            # def login():   # 2、login = outer(login)  # 4、 login = inner
     print("login%s"%what)
 
-login("可以了")     # 5、执行inner
+# login("可以了")     # 5、执行inner
 
 
 # 正则
@@ -304,3 +304,7 @@ def z_yinhao():
 # if re.findall('DDD',a):
 #
 #     print("lll")
+
+def ip_addr(a):
+    import re
+    b = re.findall('([12])?([0-5])')

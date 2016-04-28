@@ -10,13 +10,16 @@ def equl_tihuan(g):
         g = g.replace(" ","")
         if g.startswith("+"):
             g = g[1:]
-        if re.findall('\+-|--|\+\+|-\+|\*\+|/\+',g):
+        if re.findall('\+-|--|\+\+|-\+|\*\+|/\+|\*\*\+|//\+|%\+',g):
             g = re.sub('\+-','-',g)
             g = re.sub('--','+',g)
             g = re.sub('\+\+','+',g)
             g = re.sub('-\+','-',g)
             g = re.sub('\*\+','*',g)
             g = re.sub('/\+',"/",g)
+            g = re.sub('\*\*\+',"**",g)
+            g = re.sub('//\+',"//",g)
+            g = re.sub('%\+',"%",g)
         else:
             break
     return g
