@@ -17,7 +17,11 @@ def chengfa(k):
             n = n + 1
             w1[n-1] = z
         elif i == "/":
-            z = float(w1[n-1]) / float(w1[n])
-            n = n + 1
-            w1[n-1] = z
+            try:
+                z = float(w1[n-1]) / float(w1[n])
+                n = n + 1
+                w1[n-1] = z
+            except(ZeroDivisionError):
+                print("除数不能为0")
+                exit()
     return str(z).strip()

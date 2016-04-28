@@ -97,19 +97,19 @@ def fun2():
 
 def Filter(f1,f2):
     def outer(main_fun):    # 3、outer(login)     main_fun = login  返回inner
-        def inner(f1,f2):
+        def inner(*args,**kwargs):
             f1()
-            main_fun()
+            main_fun(*args,**kwargs)
             f2()
         return inner
     return outer
 
 # 1 、先执行Filter(fun1,fun2),返回outer,变成@outer
 @Filter(fun1,fun2)      # @outer
-def login():            # def login():   # 2、login = outer(login)  # 4、 login = inner
-    print("login")
+def login(what):            # def login():   # 2、login = outer(login)  # 4、 login = inner
+    print("login%s"%what)
 
-# login()     # 5、执行inner
+login("可以了")     # 5、执行inner
 
 
 # 正则
@@ -298,8 +298,9 @@ def z_yinhao():
 #     print("ok")
 # if re.findall('a|b',a):
 #     print("haha")
-import re
-a = "+1 - (-0.2) *(-60.9-30/4+( ++++40.6*+5.9)* (-10.1/12*-11.112+9-1111-(100*---++-+3.12*71.1/9.3 -2)*5*3 +7.1 /3*99/4*2998 -10 * 56.8/-14*-1.123+13)) - (-4*3)/(16-3*2)"
-if re.findall('DDD',a):
 
-    print("lll")
+# import re
+# a = "+1 - (-0.2) *(-60.9-30/4+( ++++40.6*+5.9)* (-10.1/12*-11.112+9-1111-(100*---++-+3.12*71.1/9.3 -2)*5*3 +7.1 /3*99/4*2998 -10 * 56.8/-14*-1.123+13)) - (-4*3)/(16-3*2)"
+# if re.findall('DDD',a):
+#
+#     print("lll")

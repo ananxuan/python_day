@@ -14,19 +14,36 @@ def calculate(o):
     o = equl_tihuan(o)
 
     # 先算特殊算术
-    # o_temp = o
-    # o = o.replace("**","C")
-    # o = o.replace("//","D")
+    o_temp = o
+    # print(o)
+    o = o.replace("**","C")
+    o = o.replace("//","D")
     # o = o.replace("%","E")
-    # if re.findall('C|D|E',o):
-    #     l1 = re.findall('(\d+\.?\d*)(C|D|E)',o)
-    #     o = o_temp
-    #     n = 0
-    #     for i in l1:
-    #         # i = i.replace("C",)
-    #         l1[n] = special(i)
-    #         o = o.replace(i,l1[n],1).strip()
-    #         n += 1
+    print(o)
+    if re.findall('C|D|%',o):
+        print("ok")
+        l1 = re.findall('(\d+\.?\d*)(C|D|%)(-|\+)?([^+*/-]+)',o)
+        m = 0
+        # 拼接元祖
+        for i in l1:
+            i = "".join(i)
+            l1[m] = i
+            m += 1
+        o = o_temp
+        n = 0
+        print(l1)
+        for i in l1:
+            # i = i.replace("C",)
+            l1[n] = special(i)
+            i = i.replace("C","**")
+            i = i.replace("D","//")
+            print("i:",i)
+            print(l1[n])
+            print("o:",o)
+            o = o.replace(i,l1[n],1).strip()
+            print(o)
+            n += 1
+
     # 进行乘除
     if re.findall('[*/]',o):
         # 保留最原始的 o 值
@@ -56,6 +73,7 @@ def calculate(o):
             n = n + 1
     # 计算加减法
     if re.findall('[+-]',o):
+        if re.search('e-',o) == None:
             o = jiafa(o)
             return o
     return o
