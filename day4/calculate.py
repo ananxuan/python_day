@@ -26,7 +26,7 @@ def calculate(o):
     # print(o)
     if re.findall('C|D|E|F|G%',o):
         # print("ok")
-        l1 = re.findall('(^-)?(\d+\.?\d*)(C|D|E|F|G|%)(-|\+)?([^+*/-]+)',o)
+        l1 = re.findall('(-)?(\d+\.?\d*)(C|D|E|F|G|%)(-|\+)?([^+*/-]+)',o)
         m = 0
         # 拼接元祖
         for i in l1:

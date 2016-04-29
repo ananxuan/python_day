@@ -5,6 +5,7 @@ from equl_tihuan import equl_tihuan
 import copy
 def special(str1):
     str1 = equl_tihuan(str1)
+    # print(str1)
     w1 = re.findall('^-*\d+\.?\d*|\d+\.?\d*|-\d+\.?\d*',str1)
     w2 = re.findall('[CDEFG%]',str1)
     w2_temp = copy.copy(w2)
@@ -39,7 +40,9 @@ def special(str1):
     for i in w2:
         try:
             if i == "D":
+                # print(z)
                 z = z // float(w1[n+1])
+                # print(w1[n+1])
             elif i == "%":
                 z = z % float(w1[n+1])
             elif i == "E":
