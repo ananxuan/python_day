@@ -6,7 +6,6 @@ from chengfa import chengfa
 from jiafa import jiafa
 from special import special
 from equl_tihuan import equl_tihuan
-from deepprocess import deepprocess
 
 
 def calculate(o):
@@ -16,16 +15,15 @@ def calculate(o):
 
     # 先算特殊算术
     o_temp = o
-    # print(o)
+    # 将运算符进行替换，这样在写正则表达式的时候就很容易写了。
     o = o.replace("**-","E")
     o = o.replace("//-","F")
     o = o.replace("**","C")
     o = o.replace("//","D")
     o = o.replace("%-","G")
-    # o = o.replace("%","E")
-    # print(o)
+
     if re.findall('C|D|E|F|G%',o):
-        # print("ok")
+        # 找到可以直接运算的式子，比如3**3**3,3**2**4.1//5.2
         l1 = re.findall('(-)?(\d+\.?\d*)(C|D|E|F|G|%)(-|\+)?([^+*/-]+)',o)
         m = 0
         # 拼接元祖
@@ -35,23 +33,19 @@ def calculate(o):
             m += 1
         o = o_temp
         n = 0
-        # print(l1)
         for i in l1:
-            # i = i.replace("C",)
+            # 计算式子，然后把结果替换回来
             l1[n] = special(i)
             i = i.replace("C","**")
             i = i.replace("D","//")
             i = i.replace("E","**-")
             i = i.replace("F","//-")
             i = i.replace("G","%-")
-            # print("i:",i)
-            # print(l1[n])
-            # print("o:",o)
             o = o.replace(i,l1[n],1).strip()
-            # print(o)
             n += 1
-        if re.search('e',o):
-            o = deepprocess(o)
+        # if re.search('e',o):
+        #     o = deepprocess(o)
+
     # 进行乘除
     if re.findall('[*/]',o):
         # 保留最原始的 o 值
