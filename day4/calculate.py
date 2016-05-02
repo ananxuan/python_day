@@ -25,6 +25,7 @@ def calculate(o):
     if re.findall('C|D|E|F|G%',o):
         # 找到可以直接运算的式子，比如3**3**3,3**2**4.1//5.2
         l1 = re.findall('(-)?(\d+\.?\d*)(C|D|E|F|G|%)(-|\+)?([^+*/-]+)',o)
+        # print(l1)
         m = 0
         # 拼接元祖
         for i in l1:
@@ -79,3 +80,5 @@ def calculate(o):
             o = jiafa(o)
             return o
     return o
+if __name__ == '__main__':
+    print('此py不能直接运行,请运行计算器.py')

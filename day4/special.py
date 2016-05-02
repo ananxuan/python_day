@@ -49,3 +49,6 @@ def special(str1):
             exit()
         n += 1
     return str(z)
+
+if __name__ == '__main__':
+    print('此py不能直接运行,请运行计算器.py')

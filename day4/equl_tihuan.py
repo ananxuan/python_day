@@ -10,12 +10,20 @@ def equl_tihuan(g):
         g = g.replace(" ","")
         if g.startswith("+"):
             g = g[1:]
-        if re.findall('\+-\d',g):
+        if re.findall('\+-\d|--\d',g):
             b = re.findall('\+-\d',g)
             n = 0
             for i in b:
                 i = i.replace("+-","+0-")
                 g = g.replace(b[n],i,)
+                # print(g)
+            # b = re.findall('--\d',g)
+            # n = 0
+            # for i in b:
+            #     i = i.replace("--","-0-")
+            #     g = g.replace(b[n],i,)
+            #     print(g)
+        # print(g)
         if re.findall('\+-|--|\+\+|-\+|\*\+|/\+|\*\*\+|//\+|%\+',g):
             g = re.sub('\+-','-',g)
             g = re.sub('--','+',g)
@@ -29,3 +37,6 @@ def equl_tihuan(g):
         else:
             break
     return g
+
+if __name__ == '__main__':
+    print('此py不能直接运行,请运行计算器.py')

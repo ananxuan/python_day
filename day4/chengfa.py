@@ -25,3 +25,6 @@ def chengfa(k):
                 print("除数不能为0")
                 exit()
     return str(z).strip()
+
+if __name__ == '__main__':
+    print('此py不能直接运行,请运行计算器.py')

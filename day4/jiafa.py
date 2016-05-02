@@ -22,3 +22,5 @@ def jiafa(k):
             z -= float(w1[n])
         n += 1
     return str(z).strip()
+if __name__ == '__main__':
+    print('此py不能直接运行,请运行计算器.py')

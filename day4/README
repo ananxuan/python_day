@@ -1,0 +1,11 @@
+博客地址：http://www.cnblogs.com/owasp/
+
+计算器.py：计算器入口文件，执行> python 计算器.py  ，取括号，将括号内的值交由calcucate.py处理，
+           乘除交chengfa.py，加减交jiafa.py、特殊符号交special.py处理。
+calcucate.py：分析匹配式子，将式子交由special.py、chengfa.py、jiafa.py处理
+special.py：计算特殊运算符
+chengfa.py：计算乘除
+jiafa.py：计算加减
+equl_tihuan.py：等价替换，替换空格、--、++、-+、+-、/+、*+、//+、%+为去空格、+、+、-、-、/、*、//、%还有去掉行首的 + 号
+
+计算器.png流程图
