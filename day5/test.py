@@ -51,7 +51,7 @@ class t1:
         # print(self.name)
         print("类调用")
 
-class show:
+class show(object):
     def __init__(self):
         self.name = "ds"
         pass
@@ -62,10 +62,10 @@ class show:
         t = t1()
         t.api()
 
-# a = show()
-# a.getapi()
+a = show()
+print(a.__getattribute__("getapi"))
 
-import random,hashlib
-m = hashlib.md5()
-m.update(b'a')
-print(m.hexdigest())
+# import random,hashlib
+# m = hashlib.md5()
+# m.update(b'a')
+# print(m.hexdigest())
