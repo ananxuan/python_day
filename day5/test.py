@@ -37,4 +37,35 @@ b = [2,4,12,4,89,3,100,1]
 import again.page
 # from mod.again.page import dis.show
 # import page.show
-again.page.show()
+# again.page.show()
+
+
+class t1:
+    def __init__(self):
+        pass
+    # AttributeError: 'test1' object has no attribute '__t1',不能被实例调用
+    def __t1(self):
+        print("调用__t1")
+
+    def api(self):
+        # print(self.name)
+        print("类调用")
+
+class show:
+    def __init__(self):
+        self.name = "ds"
+        pass
+
+    def getapi(self):
+        # print(self)
+        # t1.api(self)
+        t = t1()
+        t.api()
+
+# a = show()
+# a.getapi()
+
+import random,hashlib
+m = hashlib.md5()
+m.update(b'a')
+print(m.hexdigest())
