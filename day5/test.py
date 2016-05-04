@@ -62,10 +62,42 @@ class show(object):
         t = t1()
         t.api()
 
-a = show()
-print(a.__getattribute__("getapi"))
+# a = show()
+# print(a.__getattribute__("getapi"))
 
 # import random,hashlib
 # m = hashlib.md5()
 # m.update(b'a')
 # print(m.hexdigest())
+
+import datetime as dt,test1
+print(test1._A)
+print(dt._MAXORDINAL)
+
+
+
+# a = 3
+# assert 0<= a <= 2
+class A:
+       def __init__(self):
+              self.__private()
+              self.public()
+       def __private(self):
+              print('A.__private()')
+       def public(self):
+              print('A.public()')
+class B(A):
+       def __private(self):
+              print('B.__private()')
+       def public(self):
+              print('B.public()')
+       def  _test1(self):
+           print('B._test1()')
+# b =B()
+# b._test1()
+# import test1
+# print(test1._A)
+# print("\n".join(dir(A)))
+# a = A()
+# a._A__private()
+# n = B()
