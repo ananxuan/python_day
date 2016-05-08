@@ -1,8 +1,12 @@
-import test2
-A = 1
-_A = [None,'1']
-__A = 3
-__A__ = 4
-# print(test2._B)
 
-del _A
+import random
+
+checkcode = '52'
+
+for i in range(14):
+    current = random.randrange(0,9)
+    checkcode += str(current)
+
+# print(checkcode)
+
+

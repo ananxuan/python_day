@@ -101,3 +101,5 @@ class B(A):
 # a = A()
 # a._A__private()
 # n = B()
+
+import time
