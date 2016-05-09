@@ -44,6 +44,7 @@ def math(arith_str):
     else:
         return arith_str
     # arith_str = equl_tihuan(arith_str)
+    # print("asadsad")
     return math(arith_str)
 
 if __name__ == '__main__':

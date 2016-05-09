@@ -290,7 +290,7 @@ def z_yinhao():
     b = re.findall(r"(e )(two|x{3})( )(three)( )(four)( )(five)( )s",a) # [('xxx', 'three', 'four', 'five'), ('two', 'three', 'four', 'five')]
     # 上面的额等价于 b = re.findall(r"e (two|xxx) (three) (four) (five) s",a)
     print(b)
-# z_yinhao()
+z_yinhao()
 
 # import re
 # a = "rrr"
@@ -308,3 +308,8 @@ def z_yinhao():
 def ip_addr(a):
     import re
     b = re.findall('([12])?([0-5])')
+
+import re
+# a = "123-asd+rqwf}"
+# b = re.findall('[a|+\-|b]',a)
+# print(b)
