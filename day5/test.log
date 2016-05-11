@@ -1,0 +1,6 @@
+Tue, 10 May 2016 22:40:13 Log.py[line:26] DEBUG debug message
+Tue, 10 May 2016 22:40:13 Log.py[line:27] INFO info message
+Tue, 10 May 2016 22:40:13 Log.py[line:28] WARNING warning message
+Tue, 10 May 2016 22:40:13 Log.py[line:29] ERROR error message
+Tue, 10 May 2016 22:40:13 Log.py[line:30] CRITICAL critical message
+Tue, 10 May 2016 22:40:13 Log.py[line:36] WARNING Protocol problem: connection reset
