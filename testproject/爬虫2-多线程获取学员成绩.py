@@ -7,8 +7,14 @@ import http.cookiejar
 import urllib.request
 import prettytable
 import collections
+import time
+# import logging
+import threading
 
+# # 初始化logging
+# logging.basicConfig(level=logging.INFO,format='%(asctime)s %(message)s')
 
+starttime1 = time.time()
 # urllib.request.urlopen(url) 返回 http.client.HTTPResponse 对象
 
 # 设置一个cookie处理器，它负责从服务器下载cookie到本地，并且在发送请求时带上本地的cookie
@@ -21,8 +27,15 @@ urllib.request.install_opener(opener)
 #打开登录主页面（他的目的是从页面下载cookie，这样我们在再送post数据时就有cookie了，否则发送不成功）
 # 获取网站内容
 url = "http://crm.oldboyedu.com/crm/grade/single/"
-h = urllib.request.urlopen(url)
 
+# # 打印第一次get日志
+# logging.info("开始时间")
+
+h = urllib.request.urlopen(url)
+endtime1 = time.time()
+
+# 打印第一次get日志
+# logging.info(r"the 1th time end connect http://crm.oldboyedu.com/")
 # 获取csrfmiddlewaretoken
 data = h.read().decode('UTF-8')
 for i in data.split('\n'):
@@ -56,27 +69,26 @@ xuehao_list = [
 
 chengji_list = collections.OrderedDict()
 
-#构造Post数据，他也是从抓大的包里分析得出的。
 
-for qq in qq_list:
-    post = {}
-    post['search_str'] = qq
-    post['csrfmiddlewaretoken'] = token
+def get_grade(req,qq):
     # 成绩列表默认为空
     chengji_list[qq] = []
-    #需要给Post数据编码
-    post_data = urllib.parse.urlencode(post).encode(encoding="utf-8")
-    # post
-    # req = urllib.request.Request(url,data=post_data,headers=header_dict)
-    req = urllib.request.Request(url,data=post_data)
+        # 打印获取成绩前的时间
+    # logging.info("start get %s's grade"%qq)
+    startime = time.time()
     data2 = urllib.request.urlopen(req)
+    endtime = time.time()
+    print("qq:%s持续时间:%s"%(qq,endtime-startime))
+    # 打印获取成绩前的时间
+    # logging.info("end get %s's grade"%qq)
+
     # print(type(data2)) # <class 'http.client.HTTPResponse'>
-    data = data2.read()
-    data = data.decode('UTF-8')
-    data = data.split('\n')
+    data1 = data2.read()
+    data1 = data1.decode('UTF-8')
+    data1 = data1.split('\n')
     # p_chegnji 如果遇到'<td>'则为True，下一行则就成绩。
     p_chengji = False
-    for i in data:
+    for i in data1:
         i = i.strip()
         if len(i) != 0:
             if p_chengji == True:
@@ -85,6 +97,36 @@ for qq in qq_list:
             # 获取成绩的的代码需要根据实际网页放回的源码而定。可以右键查看源代码来分析一种较好的方法获取到想要的值。
             if '<td>' == i:
                 p_chengji = True
+
+
+
+# 构建线程列表
+threads = []
+
+#构造Post数据，他也是从抓大的包里分析得出的。
+
+for qq in qq_list:
+    post = {}
+    post['search_str'] = qq
+    post['csrfmiddlewaretoken'] = token
+
+
+    #需要给Post数据编码
+    post_data = urllib.parse.urlencode(post).encode(encoding="utf-8")
+    # post
+    # req = urllib.request.Request(url,data=post_data,headers=header_dict)
+    req = urllib.request.Request(url,data=post_data)
+    t = threading.Thread(target=get_grade,args=(req,qq))
+    threads.append(t)
+
+#
+starttime2 = time.time()
+for t in threads:
+    t.setDaemon(True)
+    t.start()
+
+t.join()
+endtime2 = time.time()
 # 上课天数或网页上已展示的成绩列数
 l = len(chengji_list[qq_list[0]])
 # 打印模块头部
@@ -145,3 +187,14 @@ for xueyuan,grade in sort_chengji_list:
         add_row.append(i)
     a.add_row(add_row)
 print(a)
+# logging.info("结束时间")
+endtime = time.time()
+print("第一次请求开始时间",starttime1)
+print("第一次请求结束时间",endtime1)
+print("第一次请求持续时间",endtime1-starttime1)
+
+print("成绩爬取开始时间",starttime2)
+print("成绩爬取结束时间",endtime2)
+print("成绩爬虫持续时间",endtime2-starttime2)
+
+print("程序持续时间",endtime2-starttime1)
