@@ -28,8 +28,8 @@ def begin():
     :return:
     """
     print("欢迎来到模拟ATM和购物商城！")
-    print("这里已经创建yi一个模拟账户：")
-    print("\033[1;31m账户1：5213464368221768,密码:J12%^sf1234\033[0m")
+    print("这里已经创建一个模拟账户：")
+    print("\033[1;31m账户1：5231708578073521,密码:J12%^sf1234\033[0m")
     fun_dic = {"1":atm.login,"3":exit_this}
     # if create_account() != True:
     #     print("注册账户失败！")

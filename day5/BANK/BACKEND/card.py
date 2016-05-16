@@ -89,8 +89,10 @@ def create_card(card_id,card_password):
         json.dump(card_dic,f)
         f.write("\n")
     # logging.info("create card:%s"%card_id)
-    wlog.wlog("create card:%s"%card_id)
+    wlog.wlog(card_id,"create card:%s"%card_id)
     # 为了能够打印账单，这里模拟生成账单数据
+    taoxian(card_id,2000)
+    taoxian(card_id,300)
     if moni_create_xiaofei(card_id):
         return True
     else:
@@ -143,14 +145,30 @@ def moni_create_xiaofei(card_id):
         f.write("\n")
 
     mod_credit_limit(card_id,-(card_dic1["money"]+card_dic2["money"]))
+    wlog.wlog(card_id,"%s %d yuan,shouxifei 0"%(card_dic1["shangpin"],card_dic1["money"]))
+    wlog.wlog(card_id,"%s %d yuan,shouxifei 0"%(card_dic2["shangpin"],card_dic2["money"]))
     return True
 
 
 def taoxian(card_id,money):
+    print("取现需收取1%的手续费，手续费最低10元")
     TEMP_DB_CARD_ACCOUNT_FILE = "%s_temp"%DB_CARD_ACCOUNT_FILE
     flag = False
     # 修改账户信用余额
-    if mod_credit_limit(card_id,-money) == True:
+    if money > 1000:
+        shouxufei = money * 0.01
+    else:
+        shouxufei = 10
+    # money += shouxufei
+    while True:
+        ok = input("收取手续费%s元，请确认[yes/no]?> "%shouxufei).strip().upper()
+        if ok == "YES":
+            break
+        elif ok == "NO":
+            return None
+        else:
+            print("请输入[YES/NO]")
+    if mod_credit_limit(card_id,-(money+shouxufei)) == True:
         flag = True
 
     # 写购买记录和操作日志
@@ -159,13 +177,13 @@ def taoxian(card_id,money):
         xiaofei_dic1 = collections.OrderedDict()
         xiaofei_dic1["time"] = time.strftime("%Y%m%d")
         xiaofei_dic1["shangpin"] = "taoxian"
-        xiaofei_dic1["money"] = money
+        xiaofei_dic1["money"] = money+shouxufei
         # type_id:0为购物，1为套现，2为还款
         xiaofei_dic1["type_id"] = 1
         with open(DB_XIAOFEI_FILE,'a') as f:
             json.dump(xiaofei_dic1,f)
             f.write("\n")
-        wlog.wlog(card_id,"taoxian %d yuan"%money)
+        wlog.wlog(card_id,"taoxian %d yuan,shouxifei %s"%(money,shouxufei))
     return flag
 
 
@@ -179,9 +197,10 @@ def query_bill(card_id,month):
     with open(DB_XIAOFEI_FILE,'r') as f:
         for i in f:
             i = json.loads(i)
-            if start_date <= time.strptime(i["time"],"%Y%m%d") <= end_date:
+            # if start_date <= time.strptime(i["time"],"%Y%m%d") <= end_date:
+            if time.strptime(i["time"],"%Y%m%d") <= end_date:
                 record_list.append(json.dumps(i))
-
+    wlog.wlog(card_id,"query_bill on month %s"%month)
     return record_list
 
 

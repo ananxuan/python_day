@@ -69,6 +69,7 @@ def huankuan():
 # 查询账单
 def query_bill(card_id):
     print("查询账单")
+    start_date  =  time.strptime("2016%s09"%(str(int(month)-1)),"%Y%m%d")
     month = input("您要查询几月份账单:> ").strip()
     need_pay = 0
     if int(month) in range(1,13):
@@ -79,9 +80,16 @@ def query_bill(card_id):
             print(i["time"],end="")
             print(8*" ",end="")
             print("￥ ",i["money"])
-            if i["type_id"] == 1:
-                lixi = float(i["money"]) * (time.mktime(time.strptime(time.strftime("%Y%m%d",time.localtime()),"%Y%m%d")) - time.mktime(time.strptime(i["time"],"%Y%m%d")))/86400
-                print("套现利息:")
+            # if time.strptime(i["time"],"%Y%m%d") < start_date:
+            #     zhinajin =
+            # if i["type_id"] == 1:
+            #
+            #     # lixi = float(i["money"]) * (time.mktime(time.strptime(time.strftime("%Y%m%d",time.localtime()),"%Y%m%d")) - time.mktime(time.strptime(i["time"],"%Y%m%d")))/86400
+            #     shouxufei =  i["money"] / 100.0
+            #     if shouxufei < 10:
+            #         shouxufei = 10.0
+            #     print("￥ ",i["money"])
+            #     print("套现手续费:%s"%shouxufei)
             need_pay += float(i["money"])
         print("\033[1;31;0m本期应还%.2f\033[0m"%need_pay,end="")
         print(8*" ",end="")
