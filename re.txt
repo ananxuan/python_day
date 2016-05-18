@@ -1,0 +1,330 @@
+一简介：
+就其本质而言，正则表达式（或 RE）是一种小型的、高度专业化的编程语言，
+（在Python中）它内嵌在Python中，并通过 re 模块实现。正则表达式模式被
+编译成一系列的字节码，然后由用 C 编写的匹配引擎执行。
+
+二
+字符匹配（普通字符，元字符）：
+普通字符：大多数字符和字母都会和自身匹配
+        >>> re.findall('alex','yuanaleSxalexwupeiqi')
+           ['alex']
+
+2元字符：.   ^   $   *   +   ?   { }   [ ]   |   ( ) \
+
+
+我们首先考察的元字符是"[" 和 "]"。它们常用来指定一个字符类别，所谓字符类
+别就是你想匹配的一个字符集。字符可以单个列出，也可以用“-”号分隔的两个给定
+字符来表示一个字符区间。例如，[abc] 将匹配"a", "b", 或 "c"中的任意一个字
+符；也可以用区间[a-c]来表示同一字符集，和前者效果一致。如果你只想匹配小写
+字母，那么 RE 应写成 [a-z].
+元字符在类别里并不起作用。例如，[akm$]将匹配字符"a", "k", "m", 或 "$" 中
+的任意一个；"$"通常用作元字符，但在字符类别里，其特性被除去，恢复成普通字
+符。
+re.search("[\d]","abc3").group()
+
+
+():
+#!python
+>>> p = re.compile('(a(b)c)d')
+>>> m = p.match('abcd')
+>>> m.group(0)
+'abcd'
+>>> m.group(1)
+'abc'
+>>> m.group(2)
+'b'
+
+[]:元字符[]表示字符类，在一个字符类中，只有字符^、-、]和\有特殊含义。
+字符\仍然表示转义，字符-可以定义字符范围，字符^放在前面，表示非.
+
++           匹配+号前内容1次至无限次
+?           匹配?号前内容0次到1次
+{m}         匹配前面的内容m次
+{m,n}       匹配前面的内容m到n次
+*?,+?,??,{m,n}?    前面的*,+,?等都是贪婪匹配，也就是尽可能匹配，后面加?号使其变成惰性匹配
+
+
+从前面的描述可以看到'*'，'+'和'?'都是贪婪的，但这也许并不是我们说要的，
+所以，可以在后面加个问号，将策略改为非贪婪，只匹配尽量少的RE。示例，
+体会两者的区别：  
+>>> re.findall(r"a(\d+?)","a23b") # 非贪婪模式
+        ['2']
+>>> re.findall(r"a(\d+)","a23b")
+        ['23']
+
+
+>>> re.search('<(.*)>', '<H1>title</H1>').group()
+'<H1>title</H1>'
+re.search('<(.*?)>', '<H1>title</H1>').group()
+'<H1>'
+
+
+
+注意比较这种情况：
+>>> re.findall(r"a(\d+)b","a23b")
+        ['23']
+>>> re.findall(r"a(\d+?)b","a23b") #如果前后均有限定条件，则非匹配模式失效
+        ['23']
+		
+		
+\:
+反斜杠后边跟元字符去除特殊功能，
+反斜杠后边跟普通字符实现特殊功能。
+引用序号对应的字组所匹配的字符串
+re.search(r"(alex)(eric)com\2","alexericcomeric")
+
+\d  匹配任何十进制数；它相当于类 [0-9]。
+\D  匹配任何非数字字符；它相当于类 [^0-9]。
+\s  匹配任何空白字符；它相当于类  [ \t\n\r\f\v]。
+\S  匹配任何非空白字符；它相当于类 [^ \t\n\r\f\v]。
+\w  匹配任何字母数字字符；它相当于类 [a-zA-Z0-9_]。
+\W  匹配任何非字母数字字符；它相当于类 [^a-zA-Z0-9_]
+\b: 匹配一个单词边界，也就是指单词和空格间的位置。
+
+例如， 'er/b' 可以匹配"never" 中的 'er'，但不能匹配 "verb" 中的 'er'。
+\b只是匹配字符串开头结尾及空格回车等的位置, 不会匹配空格符本身 
+例如"abc sdsadasabcasdsadasdabcasdsa",
+\sabc\s不能匹配,\babc\b可以匹配到"abc"
+>>> re.findall("\babc\b","abc sdsadasabcasdsadasdabcasdsa")
+[]
+>>> re.findall(r"\babc\b","abc sdsadasabcasdsadasdabcasdsa")
+['abc']
+\b 就是用在你匹配整个单词的时候。 如果不是整个单词就不匹配。 你想匹
+配 I 的话，你知道，很多单词里都有I的，但我只想匹配I，就是“我”，这个时
+候用 \bI\b
+************************************************
+函数：
+
+1
+match：re.match(pattern, string, flags=0)
+flags	编译标志位，用于修改正则表达式的匹配方式，如：是否区分大小写，
+多行匹配等等。
+re.match('com', 'comwww.runcomoob').group()
+
+re.match('com', 'Comwww.runComoob',re.I).group()
+
+
+2
+search：re.search(pattern, string, flags=0)
+re.search('\dcom', 'www.4comrunoob.5com').group()
+
+
+注意：
+re.match('com', 'comwww.runcomoob')
+re.search('\dcom', 'www.4comrunoob.5com')
+一旦匹配成功，就是一个match object 对象，而match object 对象拥有以下方法：
+group()	返回被 RE 匹配的字符串
+start()	返回匹配开始的位置
+end()	返回匹配结束的位置
+span()	返回一个元组包含匹配 (开始,结束) 的位置
+group() 返回re整体匹配的字符串，可以一次输入多个组号，对应组号匹配的字符串。
+1. group（）返回re整体匹配的字符串，
+2. group (n,m) 返回组号为n，m所匹配的字符串，如果组号不存在，则返回indexError异常
+3.groups（）groups() 方法返回一个包含正则表达式中所有小组字符串的元组，从 1 到 
+所含的小组号，通常groups（）不需要参数，返回一个元组，元组中的元就是正则
+表达式中定义的组。
+-----------------------------------------------
+import re
+a = "123abc456"
+ re.search("([0-9]*)([a-z]*)([0-9]*)",a).group(0)   #123abc456,返回整体
+ re.search("([0-9]*)([a-z]*)([0-9]*)",a).group(1)   #123
+ re.search("([0-9]*)([a-z]*)([0-9]*)",a).group(2)   #abc
+ re.search("([0-9]*)([a-z]*)([0-9]*)",a).group(3)   #456
+ 
+ group(1) 列出第一个括号匹配部分，group(2) 列出第二个括号匹配部分，group(3) 
+ 列出第三个括号匹配部分。
+ 
+-----------------------------------------------
+3
+findall：
+re.findall  以列表形式返回所有匹配的字符串
+　　re.findall可以获取字符串中所有匹配的字符串。如：
+
+p = re.compile(r'\d+')
+print p.findall('one1two2three3four4')
+
+
+re.findall(r'\w*oo\w*', text)；获取字符串中，包含'oo'的所有单词。
+     
+       import re
+       text = "JGood is a  handsome boy,he is handsome and cool,clever,and so on ...."
+       print re.findall(r'\w*oo\w*',text) #结果：['JGood', 'cool']
+       #print re.findall(r'(\w)*oo(\w)*',text) # ()表示子表达式 结果：[('G', 'd'), ('c', 'l')]
+
+finditer() :
+
+#!python
+>>> p = re.compile(r'\d+')
+>>> iterator = p.finditer('12 drumm44ers drumming, 11 ... 10 ...')
+>>> for match in iterator:
+	 match.group() , match.span()
+
+4
+sub subn：
+
+re.sub(pattern, repl, string, max=0)
+re.sub("g.t","have",'I get A,  I got B ,I gut C')
+
+
+5
+split：
+p = re.compile(r'\d+')
+p.split('one1two2three3four4')
+
+re.split('\d+','one1two2three3four4')
+
+6
+re.compile(strPattern[, flag]):
+    这个方法是Pattern类的工厂方法，用于将字符串形式的正则表达式编译为
+	Pattern对象。 第二个参数flag是匹配模式，取值可以使用按位或运算符'|'
+	表示同时生效，比如re.I | re.M
+　　可以把正则表达式编译成一个正则表达式对象。可以把那些经常使用的正则
+表达式编译成正则表达式对象，这样可以提高一定的效率。下面是一个正则表达式
+对象的一个例子：
+
+import re
+text = "JGood is a handsome boy, he is cool, clever, and so on..."
+regex = re.compile(r'\w*oo\w*')
+print regex.findall(text)   #查找所有包含'oo'的单词
+
+
+
+
+
+
+
+question：
+1 re.findall('\d*', 'www33333')
+
+2 re.split("[bc]","abcde")
+
+
+3 source = "1 - 2 *  ( (60-30 +(-9-2-5-2*3-5/3-40*4/2-3/5+6*3) * (-9-2-5-2*5/3 + 7 /3*99/4*2998 +10 * 568/14 )) - (-4*3)/ (16-3*2) )"
+
+
+re.search('\([^()]*\)', source).group()regular='\d+\.?\d*([*/]|\*\*)[\-]?\d+\.?\d*'
+re.search('\d+\.?\d*([*/]|\*\*)[\-]?\d+\.?\d*', string).group()
+
+add_regular='[\-]?\d+\.?\d*\+[\-]?\d+\.?\d*'
+sub_regular='[\-]?\d+\.?\d*\-[\-]?\d+\.?\d*'
+re.findall(sub_regular, "(3+4-5+7+9)")
+
+
+4 检测一个IP地址：
+re.search(r"(([01]?\d?\d|2[0-4]\d|25[0-5])\.){3}([01]?\d?\d|2[0-4]\d|25[0-5]\.)","192.168.1.1")
+
+
+
+
+
+-----------------------------------------------------------
+
+re.I	使匹配对大小写不敏感
+re.L	做本地化识别（locale-aware）匹配
+re.M	多行匹配，影响 ^ 和 $
+re.S	使 . 匹配包括换行在内的所有字符
+>>> re.findall(".","abc\nde")
+>>> re.findall(".","abc\nde",re.S)
+re.U	根据Unicode字符集解析字符。这个标志影响 \w, \W, \b, \B.
+re.X	该标志通过给予你更灵活的格式以便你将正则表达式写得更易于理解。
+
+re.S：.将会匹配换行符，默认.逗号不会匹配换行符
+>>> re.findall(r"a(\d+)b.+a(\d+)b","a23b\na34b")
+        []
+>>> re.findall(r"a(\d+)b.+a(\d+)b","a23b\na34b",re.S)
+        [('23','34')]
+>>>
+re.M：^$标志将会匹配每一行，默认^只会匹配符合正则的第一行；默认$只会匹配符合正则的末行
+>>> re.findall(r"^a(\d+)b","a23b\na34b")
+        ['23']
+>>> re.findall(r"^a(\d+)b","a23b\na34b",re.M)
+        ['23','34']
+但是，如果没有^标志，
+>>> re.findall(r"a(\d+)b","a23b\na34b")
+        ['23','43']
+可见，是无需re.M
+
+import re
+
+n='''12 drummers drumming,
+11 pipers piping, 10 lords a-leaping'''
+
+p=re.compile('^\d+')
+p_multi=re.compile('^\d+',re.MULTILINE) #设置 MULTILINE 标志
+print re.findall(p,n)  #['12']
+print re.findall(p_multi,n) # ['12', '11']
+============================
+import re
+a = 'a23b'
+print re.findall('a(\d+?)',a)  #['2']
+print re.findall('a(\d+)',a) #['23']
+print re.findall(r'a(\d+)b',a) #['23']
+print re.findall(r'a(\d+?)b',a) # ['23']
+============================
+b='a23b\na34b'
+''' . 匹配非换行符的任意一个字符'''
+
+ re.findall(r'a(\d+)b.+a(\d+)b',b) #[]
+
+ re.findall(r'a(\d+)b',b,re.M) # ['23', '34']
+
+ re.findall(r'^a(\d+)b',b,re.M) # ['23', '34']
+
+ re.findall(r'a(\d+)b',b) #['23','34'] 可以匹配多行
+
+ re.findall(r'^a(\d+)b',b) # ['23'] 默认^只会匹配符合正则的第一行
+
+ re.findall(r'a(\d+)b$',b) # ['34'] 默认$只会匹配符合正则的末行
+
+ re.findall(r'a(\d+)b',b,re.M) #['23', '34']
+
+ re.findall(r'a(\d+)b.?',b,re.M)  # ['23', '34']
+
+ re.findall(r"a(\d+)b", "a23b\na34b")  # ['23', '34']
+---------------------------------------------------------------
+
+
+推荐：http://www.cnblogs.com/huxi/archive/2010/07/04/1771073.html
+
+
+
+
+*****关于rawstring以及\:
+
+\n是换行，ASCLL码是10
+\r是回车，ASCLL码是13
+
+ re.findall("\","abc\de")
+
+f=open("C:\abc.txt")
+\a是 转义字符 007，响铃符 BEL。
+f=open(r"D:\abc.txt")
+
+？？？
+>>> re.findall(r"\d","ww2ee")
+['2']
+>>> re.findall("\d","ww2ee")
+['2']
+
+>>强烈建议用raw字符串来表述正则
+
+
+
+你可能已经看到前面关于原始字符串用法的一些例子了。原始字符串的产生正是由于有正则表
+达式的存在。原因是ASCII 字符和正则表达式特殊字符间所产生的冲突。比如，特殊符号“\b”在
+ASCII 字符中代表退格键，但同时“\b”也是一个正则表达式的特殊符号，代表“匹配一个单词边界”。
+为了让RE 编译器把两个字符“\b”当成你想要表达的字符串，而不是一个退格键，你需要用另一个
+反斜线对它进行转义，即可以这样写：“\\b”。
+但这样做会把问题复杂化，特别是当你的正则表达式字符串里有很多特殊字符时，就更容
+易令人困惑了。原始字符串就是被用于简化正则表达式的复杂程度。
+事实上，很多Python 程序员在定义正则表达式时都只使用原始字符串。
+下面的例子用来说明退格键“\b” 和正则表达式“\b”(包含或不包含原始字符串)之间的区别：
+>>> m = re.match('\bblow', 'blow') # backspace, no match #退格键,没有匹配
+
+>>> m = re.match('\\bblow', 'blow') # escaped \, now it works #用\转义后，现在匹
+配了
+
+>>> m = re.match(r'\bblow', 'blow') # use raw string instead #改用原始字符串
+
+你可能注意到我们在正则表达式里使用“\d”，没用原始字符串，也没出现什么问题。那是因为
+ASCII 里没有对应的特殊字符，所以正则表达式编译器能够知道你指的是一个十进制数字
