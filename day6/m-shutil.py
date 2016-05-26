@@ -17,3 +17,6 @@ import os
 # shutil.copytree("srcdir","dstdir")
 print(os.path.dirname(__file__))
 print(os.path.basename(__file__))
+
+import shelve
+shelve.

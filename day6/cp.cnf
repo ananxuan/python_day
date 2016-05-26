@@ -1,0 +1,10 @@
+[DEFAULT]
+user = nobody
+
+[mysqld]
+user = mysql
+group = mysql
+
+[client]
+log = /var/log/mysqld.log
+
