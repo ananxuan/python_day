@@ -6,33 +6,44 @@ import re
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
-
+    """
     code_msg  = {
-        "220":b"{} FTP server ready\r\n",
-        "230":b"User {} login in\r\n",
-        "331":b"Password required for {}\r\n",
-        "530":b"Login incorrect\r\n",
+        "220":"{} FTP server ready\r\n",
+        "230":"User {} login in\r\n",
+        "331":"Password required for {}\r\n",
+        "530":"Login incorrect\r\n",
+    }
+    """
+    code_msg  = {
+        "220":"{} FTP server ready\r\n",
+        "230":"User {} login in\r\n",
+        "331":"Password required for {}\r\n",
+        "530":"Login incorrect\r\n",
     }
 
     def auth(self):
 
         r_data = self.request.recv(1024).decode()
         r_data_cmd ,client_user = re.split(r"\s",r_data,1)
+        client_user = client_user.strip()
+        print("user:%s"%client_user)
         if r_data_cmd == "USER":
-            self.request.send(bytes((b"331 %s"%(self.code_msg["331"])).format(r_data_cmd)))
+            self.request.send(bytes("331 %s"%(self.code_msg["331"]).format(r_data_cmd),"utf-8"))
             r_data = self.request.recv(1024).decode()
             r_data_cmd ,client_pass = re.split(r"\s",r_data,1)
+            client_pass = client_pass.strip()
+            print("pass:%s"%client_pass)
             if r_data_cmd == "PASS":
                 if client_user == "DS" and client_pass == "123":
-                    self.request.send((b"230 %s"%self.code_msg["230"]).format(client_user))
+                    self.request.send(bytes(("230 %s"%self.code_msg["230"]).format(client_user),"utf-8"))
                 else:
-                    self.request.send(b"530 %s"%self.code_msg["530"])
+                    self.request.send(bytes(("530 %s"%self.code_msg["530"]),"utf-8"))
 
 
     def handle(self):
         print("new connect:%s:%s"%self.client_address)
         # 告诉客户端连接成功
-        self.request.send(b"220 %s %s"%(self.server,self.code_msg["220"]))
+        self.request.send(bytes(("220 {}".format(self.code_msg["220"])).format("127.0.0.1"),"utf-8"))
         self.auth()
         while True:
             # 这里只进行命令处理
@@ -43,7 +54,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     print("客户端退出连接！")
 
                 print("recv from %s:%s :%s"%(self.client_address,r_data))
-                self.request.sen(r_data)
+                self.request.send(r_data)
             except ConnectionResetError:
                 print("client %s:%s is break connect"%self.client_address)
                 break

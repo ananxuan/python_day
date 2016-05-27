@@ -6,6 +6,7 @@ __author__ = 'DSOWASP'
 import socket
 import sys
 import  re
+import getpass
 
 class Ftp(object):
     def __init__(self,ipaddr,port):
@@ -17,6 +18,7 @@ class Ftp(object):
     def run(self):
         # 确认服务器发送220消息
         server_status_msg = self.sk.recv(128).decode()
+        # print("ser1:%s"%server_status_msg)
         if server_status_msg.split()[0] == "220":
             print(server_status_msg)
             if self.auth():
@@ -29,18 +31,20 @@ class Ftp(object):
 
     def auth(self):
         # 发送用户名,用户名默认是ftp
-        username = "ftp"
+        # username = "ftp"
         username = input("用户 (%s:(ftp)): "%self.iport[0]).strip()
-        self.sk.send(b"USER %s\r\n"%username)
-        r_data = self.sk.recv(21024)
-        print(r_data.decode())
-        r_data_code, r_data_msg = re.split(b"\s",r_data,1)
+        if username == "":
+            username = "ftp"
+        self.sk.send(bytes("USER %s\r\n"%username,"utf-8"))
+        r_data = self.sk.recv(1024).decode()
+        print(r_data.strip())
+        r_data_code, r_data_msg = re.split(r"\s",r_data,1)
         if r_data_code == "331":
-            password = input("pass: ").sreip()
-            self.sk.send(bytes(password))
-            r_data = self.sk.recv(1024)
-            print(r_data.decode())
-            r_data_code, r_data_msg = re.split(b"\s",r_data,1)
+            password = getpass.getpass("pass: ").strip()
+            self.sk.send(bytes("PASS %s\r\n"%password,"utf-8"))
+            r_data = self.sk.recv(1024).decode()
+            print(r_data.strip())
+            r_data_code, r_data_msg = re.split(r"\s",r_data,1)
             if r_data_code == "230":
                 return
 
