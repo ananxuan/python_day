@@ -5,6 +5,7 @@ __author__ = 'DSOWASP'
 import subprocess
 import sys
 import os
+import socketserver
 import configparser
 
 
@@ -17,21 +18,23 @@ from bin import server_socket
 from bin import writelogging
 
 
+
+
 CONGFILE = "{}/conf/simpleftp.conf".format(BASEDIR)
 BASENAME = os.path.basename(__file__).split(r".")[0]
 
 
 class MyFtp(object):
 
-    def __init__(self):
-        pass
+    def __init__(self,ipaddr,port):
+        self.iport = (ipaddr,port)
 
     def start(self):
         try:
-            pass
-        except:
-            pass
-
+            server = socketserver.ThreadingTCPServer(self.iport,server_socket.MyTCPHandler)
+            server.serve_forever()
+        except KeyboardInterrupt as e:
+            print(e)
 
 
 def read_conf(section="ftp", *args):
@@ -60,8 +63,8 @@ if __name__ == "__main__":
         print(r"Usage: myftp.py {start|stop|restart|status}")
     else:
         # 读取配置文件
-        port,ipaddr = read_conf("ftp","port","ipaddr")
-        mf = MyFtp()
+        ipaddr,port = read_conf("ftp","ipaddr","port")
+        mf = MyFtp(ipaddr,port)
         if hasattr(mf,sys.argv[1]):
             fun = getattr(mf,sys.argv[1])
             fun()
