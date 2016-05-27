@@ -3,15 +3,16 @@ __author__ = 'DSOWASP'
 
 import socket
 
-ip_port = ('127.0.0.1',9999)
+ip_port = ('192.168.5.124',9999)
 
 sk = socket.socket()
 sk.connect(ip_port)
 
 while True:
-    cmd = input("cmd> ").strip()
-    if cmd == "":
-        continue
+    cmd = input("cmd> ")
+    print("发送:%s"%cmd)
+    if cmd == "q":
+        break
     try:
         sk.send(bytes(cmd,"utf-8"))
         raw_data = sk.recv(1024)

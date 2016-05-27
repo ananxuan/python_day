@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import socket
-ip_port = ('127.0.0.1',9999)
+ip_port = ('192.168.3.224',9999)
 
 sk = socket.socket()
 sk.connect(ip_port)
@@ -11,15 +11,22 @@ sk.connect(ip_port)
 # print(str(server_reply,'utf8'))
 
 while True:
-    user_input = input("cmd>>:").strip()
+    try:
+        user_input = input("cmd>>:").strip()
+    except KeyboardInterrupt as e:
+        print(e)
+        break
     if user_input == "":
         continue
-    if user_input == 'q':break
+    if user_input == 'q':
+        break
 
     sk.send(bytes(user_input,'utf8'))
     # print("发送数据: \033[1;32;0m%s\033[0m"%user_input)
 
     server_reply_size_data = sk.recv(50)
+    # if not server_reply_size_data:
+    #     continue
     # print(server_reply_size_data)
     server_reply_size_flag, server_reply_size = server_reply_size_data.decode("utf-8").split("|")
     server_reply_size = int(server_reply_size)
@@ -43,4 +50,5 @@ while True:
     #     print("接收数据: \033[1;32;0m%s\033[0m"%str(server_reply,'utf-8'))
     # except UnicodeDecodeError:
     #     print("接收数据: \033[1;32;0m%s\033[0m"%str(server_reply,'gbk'))
+
 sk.close()

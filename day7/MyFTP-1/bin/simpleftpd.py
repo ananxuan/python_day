@@ -6,6 +6,7 @@ import socket
 import sys
 import os
 import subprocess
+import socketserver
 
 
 BASEDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -16,7 +17,10 @@ from bin import writelogging
 CONGFILE = "{}/conf/simpleftp.conf".format(BASEDIR)
 BASENAME = os.path.basename(__file__).split(r".")[0]
 
-class MyFtp(object):
+
+
+
+class MyTCPHandler(socketserver.BaseRequestHandler):
 
     def __init__(self,port,ipaddr):
         self.port = port
