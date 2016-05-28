@@ -7,6 +7,7 @@ import socket
 import sys
 import  re
 import getpass
+import hashlib
 
 class Ftp(object):
     def __init__(self,ipaddr,port):
@@ -15,6 +16,24 @@ class Ftp(object):
         self.sk.connect(self.iport)
         self.run()
 
+
+
+
+    def get(self,filename):
+        f = open(filename,"wb")
+
+        self.sk.send(bytes("get %s"%filename,"utf-8"))
+
+        fsize_data = self.sk.recv(1024).decode()
+        print("f_size_data:%s"%fsize_data)
+        fsize = int(fsize_data.split()[1])
+        print("fsize:%s"%fsize)
+        recv_size = 0
+        while recv_size < fsize:
+            content = self.sk.recv(4096)
+            f.write(content)
+            recv_size += len(content)
+            print("recv_size:%s"%recv_size)
     def run(self):
         # 确认服务器发送220消息
         server_status_msg = self.sk.recv(128).decode()
@@ -26,6 +45,10 @@ class Ftp(object):
 
         while True:
             cmd_input = input("ftp> ").strip()
+            cmd ,arg = cmd_input.split()
+            if hasattr(self,cmd):
+                fun = getattr(self,cmd)
+                fun(arg)
 
 
 
@@ -41,6 +64,9 @@ class Ftp(object):
         r_data_code, r_data_msg = re.split(r"\s",r_data,1)
         if r_data_code == "331":
             password = getpass.getpass("pass: ").strip()
+            pw = hashlib.md5()
+            pw.upadte(password)
+            password = pw.hexdigest()
             self.sk.send(bytes("PASS %s\r\n"%password,"utf-8"))
             r_data = self.sk.recv(1024).decode()
             print(r_data.strip())
